@@ -2,9 +2,12 @@ package personal;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.time.Month;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 	/*
 	 *  23.Create three lists to store personal records. The first list stores names, the
@@ -61,9 +64,14 @@ public class PersonalRecords {
 		}
 	}
 
+	private int enterName(String name) {
+		int result = -1;
+		return result;
+	}
+
 	private void inputScanner() {
 		Scanner s = new Scanner(System.in);
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
 		System.out.println("Welcome to Personal Records");
 		System.out.println("Please enter 1 to access the database,");
@@ -74,25 +82,27 @@ public class PersonalRecords {
 				if (nextInt==1) {
 					System.out.println("Please enter the name you want to add or search for:");
 					String name = s.next();
-					LocalDate date = null;
+					Date date = null;
 					int nameIndex = findName(name);
 					if (nameIndex==-1) { // person needs to be added
 						while (date==null) {
 							System.out.println("Please enter the birthday in the format dd-MM-yyyy");
 							String dateString = s.next();
 							try {
-								date = LocalDate.parse(dateString, dtf);
-							} catch (DateTimeParseException e) {
+								date = sdf.parse(dateString);
+							} catch (ParseException e) {
 								System.out.println("Incorrect date format");
 							}
 						}
 						System.out.println("Please enter the phone number");
 						String number = s.next();
-						addRecord(name, date.getDayOfMonth(), date.getMonthValue(), date.getYear(), number);
+						addRecord(name, date.getDay(), date.getMonth(), date.getYear(), number);
 						System.out.println("Personal records added");
 					} else { // return birthday and phone number	
 						personalRecord(nameIndex);
 					}
+					
+
 				} else if (nextInt==2) {
 					printRecords();
 				} else {
